@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "324224170169",
+    "project_id": "quizapp-e8016",
+    "storage_bucket": "quizapp-e8016.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:324224170169:android:04a55e87578af7f8520368",
+        "android_client_info": {
+          "package_name": "com.terabit.quizapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAolM9GTKRxZ6pl3SqsUvf8Koo08wc-iQ8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
