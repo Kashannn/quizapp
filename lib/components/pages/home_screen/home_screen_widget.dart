@@ -133,7 +133,7 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsetsDirectional.fromSTEB(20.0, 30.0, 153.0, 0.0),
+                  padding:EdgeInsets.only(left: 20,right: 20,top: 30),
                   child: Text(
                     'Select Category',
                     textAlign: TextAlign.start,

@@ -7,7 +7,7 @@ class FirebaseServices {
 
   Future<List<QuizModelStruct>> fetchQuizQuestions(String category) async {
     final querySnapshot = await FirebaseFirestore.instance
-        .collection('quiz_test')
+        .collection('Quiz')
         .where('category', isEqualTo: category)
         .get();
 

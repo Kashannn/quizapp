@@ -13,43 +13,41 @@ class QuizModelStruct extends FFFirebaseStruct {
     String? correctOption,
     String? img,
     List<String>? options,
+    DateTime? date, // New field
     FirestoreUtilData firestoreUtilData = const FirestoreUtilData(),
   })  : _que = que,
         _details = details,
         _correctOption = correctOption,
         _img = img,
         _options = options,
+        _date = date, // Initialize the field
         super(firestoreUtilData);
 
-  // "que" field.
+  // Existing fields
   String? _que;
   String get que => _que ?? '';
   set que(String? val) => _que = val;
 
   bool hasQue() => _que != null;
 
-  // "details" field.
   String? _details;
   String get details => _details ?? '';
   set details(String? val) => _details = val;
 
   bool hasDetails() => _details != null;
 
-  // "correctOption" field.
   String? _correctOption;
   String get correctOption => _correctOption ?? '';
   set correctOption(String? val) => _correctOption = val;
 
   bool hasCorrectOption() => _correctOption != null;
 
-  // "img" field.
   String? _img;
   String get img => _img ?? '';
   set img(String? val) => _img = val;
 
   bool hasImg() => _img != null;
 
-  // "options" field.
   List<String>? _options;
   List<String> get options => _options ?? const [];
   set options(List<String>? val) => _options = val;
@@ -60,27 +58,37 @@ class QuizModelStruct extends FFFirebaseStruct {
 
   bool hasOptions() => _options != null;
 
-  static QuizModelStruct fromMap(Map<String, dynamic> data) => QuizModelStruct(
-        que: data['que'] as String?,
-        details: data['details'] as String?,
-        correctOption: data['correctOption'] as String?,
-        img: data['img'] as String?,
-        options: getDataList(data['options']),
-      );
+  // New field
+  DateTime? _date;
+  DateTime? get date => _date;
+  set date(DateTime? val) => _date = val;
 
-  static QuizModelStruct? maybeFromMap(dynamic data) => data is Map
-      ? QuizModelStruct.fromMap(data.cast<String, dynamic>())
-      : null;
+  bool hasDate() => _date != null;
+
+  static QuizModelStruct fromMap(Map<String, dynamic> data) => QuizModelStruct(
+    que: data['que'] as String?,
+    details: data['details'] as String?,
+    correctOption: data['correctOption'] as String?,
+    img: data['img'] as String?,
+    options: getDataList(data['options']),
+    date: (data['date']) // Convert Timestamp to DateTime
+  );
 
   Map<String, dynamic> toMap() => {
-        'que': _que,
-        'details': _details,
-        'correctOption': _correctOption,
-        'img': _img,
-        'options': _options,
-      }.withoutNulls;
+    'que': _que,
+    'details': _details,
+    'correctOption': _correctOption,
+    'img': _img,
+    'options': _options,
+    'date': _date != null ? Timestamp.fromDate(_date!) : null, // Convert DateTime to Timestamp
+  }..removeWhere((key, value) => value == null); // Remove null values
 
-  @override
+// Other methods remain unchanged
+
+// Override toString(), operator==(), hashCode if necessary
+
+
+@override
   Map<String, dynamic> toSerializableMap() => {
         'que': serializeParam(
           _que,

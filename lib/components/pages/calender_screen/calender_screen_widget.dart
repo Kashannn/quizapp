@@ -1,360 +1,289 @@
-import '/flutter_flow/flutter_flow_calendar.dart';
-import '/flutter_flow/flutter_flow_theme.dart';
-import '/flutter_flow/flutter_flow_util.dart';
+
 import 'package:flutter/material.dart';
-import 'calender_screen_model.dart';
+
+import '../../../backend/firebase_services/firebase_services.dart';
+import '../../../backend/schema/structs/quiz_model_struct.dart';
+import '../answers_screen/answers_screen_widget.dart';
+
 export 'calender_screen_model.dart';
 
+
 class CalenderScreenWidget extends StatefulWidget {
-  const CalenderScreenWidget({super.key});
+  final DateTime? selectedDate;
+
+  const CalenderScreenWidget({super.key, this.selectedDate});
 
   @override
   State<CalenderScreenWidget> createState() => _CalenderScreenWidgetState();
 }
 
 class _CalenderScreenWidgetState extends State<CalenderScreenWidget> {
-  late CalenderScreenModel _model;
-
-  final scaffoldKey = GlobalKey<ScaffoldState>();
+  bool isChecked = false;
+  bool isLoading = true; // Added loading state
+  int correctCount = 0;
+  FirebaseServices firebaseServices = FirebaseServices();
+  List<QuizModelStruct> quizList = [];
+  List<Map<String, dynamic>> correctAnswers = [];
+  List<Map<String, dynamic>> selectedAnswers = [];
+  List<QuizModelStruct> filteredQuizList = [];
+  int currentIndex = 0;
+  String? selectedOption;
 
   @override
   void initState() {
     super.initState();
-    _model = createModel(context, () => CalenderScreenModel());
+    getQuizList();
   }
 
-  @override
-  void dispose() {
-    _model.dispose();
+  Future<void> getQuizList() async {
+    quizList = await firebaseServices.fetchQuizQuestions("New Guideline Cases");
 
-    super.dispose();
+    if (quizList.isNotEmpty) {
+
+      filteredQuizList = quizList.where((quiz) {
+        final quizDate = quiz.date;// Ensure this matches your date format
+        return widget.selectedDate != null &&
+            quizDate!.year == widget.selectedDate!.year &&
+            quizDate.month == widget.selectedDate!.month &&
+            quizDate.day == widget.selectedDate!.day;
+      }).toList();
+
+      // Preload all images
+      await Future.wait(
+        filteredQuizList.map((quiz) => precacheImage(NetworkImage(quiz.img), context)),
+      );
+    }
+
+    setState(() {
+      isLoading = false;
+    });
+  }
+
+  void nextQuestion() {
+    if (currentIndex >= quizList.length) {
+      // Handle end of quiz or invalid state
+      return;
+    }
+
+    if (selectedOption == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Please select an option.')),
+      );
+      return;
+    }
+
+    bool isCorrect = selectedOption == quizList[currentIndex].correctOption;
+
+    if (isCorrect) {
+      correctCount++;
+    }
+
+    selectedAnswers.add({
+      'question': quizList[currentIndex].que,
+      'selectedOption': selectedOption,
+      'correct': isCorrect,
+      'correctAnswer': quizList[currentIndex].correctOption,
+      'details': quizList[currentIndex].details,
+    });
+
+    setState(() {
+      currentIndex++;
+      selectedOption = null;
+      isChecked = false;
+    });
+
+    if (currentIndex == quizList.length) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => AnswersScreenWidget(
+            totalQuestions: quizList.length,
+            correctAnswers: correctCount,
+            questionAnswers: selectedAnswers,
+            quizList: quizList,
+          ),
+        ),
+      );
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () => _model.unfocusNode.canRequestFocus
-          ? FocusScope.of(context).requestFocus(_model.unfocusNode)
-          : FocusScope.of(context).unfocus(),
+    return SafeArea(
       child: Scaffold(
-        key: scaffoldKey,
-        backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
-        body: SafeArea(
-          top: true,
+        appBar: AppBar(
+          title: Text(
+            "New Guideline Cases",
+            style: TextStyle(
+              color: Color(0xFF103358),
+              fontWeight: FontWeight.bold,
+              fontSize: 20,
+              fontFamily: 'Poppins',
+            ),
+          ),
+          centerTitle: true,
+          elevation: 0,
+          backgroundColor: Colors.transparent,
+        ),
+        body: isLoading
+            ? Center(child: CircularProgressIndicator())
+            : SingleChildScrollView(
           child: Column(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Align(
-                alignment: const AlignmentDirectional(-1.0, -1.0),
-                child: Padding(
-                  padding:
-                      const EdgeInsetsDirectional.fromSTEB(19.0, 24.0, 99.0, 11.0),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Align(
-                        alignment: const AlignmentDirectional(0.0, 0.0),
-                        child: Stack(
-                          children: [
-                            Align(
-                              alignment: const AlignmentDirectional(1.0, -1.0),
-                              child: Material(
-                                color: Colors.transparent,
-                                elevation: 1.0,
-                                shape: const CircleBorder(),
-                                child: Container(
-                                  width: 30.0,
-                                  height: 30.0,
-                                  decoration: BoxDecoration(
-                                    color: const Color(0xFFF2F2F2),
-                                    shape: BoxShape.circle,
-                                    border: Border.all(
-                                      color: const Color(0xFFF2F2F2),
-                                    ),
-                                  ),
-                                  child: Align(
-                                    alignment: const AlignmentDirectional(0.0, 0.0),
-                                    child: Padding(
-                                      padding: const EdgeInsetsDirectional.fromSTEB(
-                                          0.0, 0.0, 10.0, 0.0),
-                                      child: InkWell(
-                                        splashColor: Colors.transparent,
-                                        focusColor: Colors.transparent,
-                                        hoverColor: Colors.transparent,
-                                        highlightColor: Colors.transparent,
-                                        onTap: () async {
-                                          context.safePop();
-                                        },
-                                        child: const Icon(
-                                          Icons.arrow_back_rounded,
-                                          color: Color(0xFF202244),
-                                          size: 25.0,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Text(
-                        'New Guideline Cases',
-                        style: FlutterFlowTheme.of(context).bodyMedium.override(
-                              fontFamily: 'Poppins',
-                              fontSize: 18.0,
-                              letterSpacing: 0.0,
-                              fontWeight: FontWeight.w600,
-                            ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
+            children: <Widget>[
+              SizedBox(height: 10),
               Padding(
-                padding: const EdgeInsetsDirectional.fromSTEB(25.0, 11.0, 0.0, 23.0),
-                child: Text(
-                  'Filter By',
-                  style: FlutterFlowTheme.of(context).bodyMedium.override(
-                        fontFamily: 'Poppins',
-                        color: const Color(0xFF103358),
-                        letterSpacing: 0.0,
-                        fontWeight: FontWeight.w500,
-                      ),
-                ),
-              ),
-              Flexible(
-                child: Padding(
-                  padding: const EdgeInsetsDirectional.fromSTEB(25.0, 0.0, 25.0, 0.0),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Flexible(
-                        child: Padding(
-                          padding: const EdgeInsetsDirectional.fromSTEB(
-                              0.0, 0.0, 10.0, 0.0),
-                          child: Material(
-                            color: Colors.transparent,
-                            elevation: 1.0,
-                            shape: const RoundedRectangleBorder(
-                              borderRadius: BorderRadius.only(
-                                bottomLeft: Radius.circular(10.0),
-                                bottomRight: Radius.circular(10.0),
-                                topLeft: Radius.circular(10.0),
-                                topRight: Radius.circular(10.0),
-                              ),
-                            ),
-                            child: Container(
-                              width: double.infinity,
-                              height: 40.0,
-                              decoration: BoxDecoration(
-                                color: FlutterFlowTheme.of(context)
-                                    .secondaryBackground,
-                                borderRadius: const BorderRadius.only(
-                                  bottomLeft: Radius.circular(10.0),
-                                  bottomRight: Radius.circular(10.0),
-                                  topLeft: Radius.circular(10.0),
-                                  topRight: Radius.circular(10.0),
-                                ),
-                              ),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.max,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    'Date',
-                                    style: FlutterFlowTheme.of(context)
-                                        .bodyMedium
-                                        .override(
-                                          fontFamily: 'Poppins',
-                                          color: const Color(0xFF103358),
-                                          letterSpacing: 0.0,
-                                        ),
-                                  ),
-                                  const Icon(
-                                    Icons.date_range_outlined,
-                                    color: Color(0xFF18A0FB),
-                                    size: 24.0,
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                      Flexible(
-                        child: Padding(
-                          padding: const EdgeInsetsDirectional.fromSTEB(
-                              0.0, 0.0, 10.0, 0.0),
-                          child: Material(
-                            color: Colors.transparent,
-                            elevation: 1.0,
-                            shape: const RoundedRectangleBorder(
-                              borderRadius: BorderRadius.only(
-                                bottomLeft: Radius.circular(10.0),
-                                bottomRight: Radius.circular(10.0),
-                                topLeft: Radius.circular(10.0),
-                                topRight: Radius.circular(10.0),
-                              ),
-                            ),
-                            child: Container(
-                              width: double.infinity,
-                              height: 40.0,
-                              decoration: BoxDecoration(
-                                color: FlutterFlowTheme.of(context)
-                                    .secondaryBackground,
-                                borderRadius: const BorderRadius.only(
-                                  bottomLeft: Radius.circular(10.0),
-                                  bottomRight: Radius.circular(10.0),
-                                  topLeft: Radius.circular(10.0),
-                                  topRight: Radius.circular(10.0),
-                                ),
-                              ),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.max,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    'Year',
-                                    style: FlutterFlowTheme.of(context)
-                                        .bodyMedium
-                                        .override(
-                                          fontFamily: 'Poppins',
-                                          color: const Color(0xFF103358),
-                                          letterSpacing: 0.0,
-                                        ),
-                                  ),
-                                  const Icon(
-                                    Icons.date_range_outlined,
-                                    color: Color(0xFF18A0FB),
-                                    size: 24.0,
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                      Flexible(
-                        child: Material(
-                          color: Colors.transparent,
-                          elevation: 1.0,
-                          shape: const RoundedRectangleBorder(
-                            borderRadius: BorderRadius.only(
-                              bottomLeft: Radius.circular(10.0),
-                              bottomRight: Radius.circular(10.0),
-                              topLeft: Radius.circular(10.0),
-                              topRight: Radius.circular(10.0),
-                            ),
-                          ),
-                          child: Container(
-                            width: double.infinity,
-                            height: 40.0,
-                            decoration: BoxDecoration(
-                              color: FlutterFlowTheme.of(context)
-                                  .secondaryBackground,
-                              borderRadius: const BorderRadius.only(
-                                bottomLeft: Radius.circular(10.0),
-                                bottomRight: Radius.circular(10.0),
-                                topLeft: Radius.circular(10.0),
-                                topRight: Radius.circular(10.0),
-                              ),
-                            ),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.max,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  'Adult',
-                                  style: FlutterFlowTheme.of(context)
-                                      .bodyMedium
-                                      .override(
-                                        fontFamily: 'Poppins',
-                                        color: const Color(0xFF103358),
-                                        letterSpacing: 0.0,
-                                      ),
-                                ),
-                                const Icon(
-                                  Icons.airline_stops_sharp,
-                                  color: Color(0xFF18A0FB),
-                                  size: 24.0,
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsetsDirectional.fromSTEB(25.0, 15.0, 15.0, 0.0),
+                padding: const EdgeInsets.all(25.0),
                 child: Material(
-                  color: Colors.transparent,
-                  elevation: 1.0,
-                  shape: const RoundedRectangleBorder(
-                    borderRadius: BorderRadius.only(
-                      bottomLeft: Radius.circular(10.0),
-                      bottomRight: Radius.circular(10.0),
-                      topLeft: Radius.circular(10.0),
-                      topRight: Radius.circular(10.0),
-                    ),
-                  ),
                   child: Container(
+                    height: 200,
                     width: double.infinity,
-                    height: 500.0,
                     decoration: BoxDecoration(
-                      color: FlutterFlowTheme.of(context).secondaryBackground,
-                      borderRadius: const BorderRadius.only(
-                        bottomLeft: Radius.circular(10.0),
-                        bottomRight: Radius.circular(10.0),
-                        topLeft: Radius.circular(10.0),
-                        topRight: Radius.circular(10.0),
+                      borderRadius: BorderRadius.circular(20),
+                      image: DecorationImage(
+                        image: NetworkImage(quizList[currentIndex].img),
+                        fit: BoxFit.cover,
                       ),
                     ),
-                    child: FlutterFlowCalendar(
-                      color: FlutterFlowTheme.of(context).primary,
-                      iconColor: FlutterFlowTheme.of(context).secondaryText,
-                      weekFormat: false,
-                      weekStartsMonday: false,
-                      rowHeight: 64.0,
-                      onChange: (DateTimeRange? newSelectedDate) {
-                        setState(
-                            () => _model.calendarSelectedDay = newSelectedDate);
-                      },
-                      titleStyle:
-                          FlutterFlowTheme.of(context).headlineSmall.override(
-                                fontFamily: 'Outfit',
-                                letterSpacing: 0.0,
+                  ),
+                ),
+              ),
+              SizedBox(height: 10),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Q: " + quizList[currentIndex].que,
+                      style: TextStyle(
+                        fontSize: 19,
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFF103358),
+                        fontFamily: 'Poppins',
+                      ),
+                    ),
+                    SizedBox(height: 20),
+                    Text(
+                      "Choose an answer:",
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFF103358),
+                        fontFamily: 'Poppins',
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(height: 20),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                child: Column(
+                  children: quizList[currentIndex].options
+                      .asMap()
+                      .entries
+                      .map((entry) {
+                    int index = entry.key;
+                    String option = entry.value;
+                    return Container(
+                      height: 55,
+                      width: double.infinity,
+                      margin: EdgeInsets.only(bottom: 8.0),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Material(
+                        elevation: 5.0,
+                        borderRadius: BorderRadius.circular(10),
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Row(
+                            mainAxisAlignment:
+                            MainAxisAlignment.spaceBetween,
+                            children: [
+                              CircleAvatar(
+                                radius: 20,
+                                backgroundColor: Color(0xFF0000000D)
+                                    .withOpacity(0.05),
+                                child: Text(
+                                  String.fromCharCode(65 + index),
+                                  style: TextStyle(
+                                    color: Color(0xFF18A0FB),
+                                    fontSize: 23,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
                               ),
-                      dayOfWeekStyle:
-                          FlutterFlowTheme.of(context).labelLarge.override(
-                                fontFamily: 'Readex Pro',
-                                letterSpacing: 0.0,
+                              SizedBox(width: 13),
+                              Expanded(
+                                child: Text(
+                                  option,
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                    color: Color(0xFF103358),
+                                  ),
+                                  overflow: TextOverflow.ellipsis,
+                                ),
                               ),
-                      dateStyle:
-                          FlutterFlowTheme.of(context).bodyMedium.override(
-                                fontFamily: 'Readex Pro',
-                                letterSpacing: 0.0,
+                              Radio<String>(
+                                value: option,
+                                groupValue: selectedOption,
+                                onChanged: (String? value) {
+                                  setState(() {
+                                    selectedOption = value;
+                                  });
+                                },
                               ),
-                      selectedDateStyle:
-                          FlutterFlowTheme.of(context).titleSmall.override(
-                                fontFamily: 'Readex Pro',
-                                letterSpacing: 0.0,
-                              ),
-                      inactiveDateStyle:
-                          FlutterFlowTheme.of(context).labelMedium.override(
-                                fontFamily: 'Readex Pro',
-                                letterSpacing: 0.0,
-                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    );
+                  }).toList(),
+                ),
+              ),
+              SizedBox(height: 10),
+              Padding(
+                padding: const EdgeInsets.all(25.0),
+                child: Container(
+                  width: double.infinity,
+                  height: 52,
+                  padding: EdgeInsets.zero,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(10),
+                    ),
+                    color: Color(0xFF18A0FB),
+                  ),
+                  child: ElevatedButton(
+                    onPressed: nextQuestion,
+                    style: ButtonStyle(
+                      elevation: MaterialStateProperty.all<double>(0),
+                      backgroundColor:
+                      MaterialStateProperty.all<Color>(
+                          Colors.transparent),
+                      shape: MaterialStateProperty.all<
+                          RoundedRectangleBorder>(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(10),
+                          ),
+                        ),
+                      ),
+                    ),
+                    child: Text(
+                      'Next',
+                      style: TextStyle(
+                        fontFamily: 'Poppins',
+                        fontSize: 15,
+                        fontWeight: FontWeight.w500,
+                        height: 1.333,
+                        letterSpacing: -0.24,
+                        color: Colors.white,
+                      ),
                     ),
                   ),
                 ),
@@ -366,3 +295,4 @@ class _CalenderScreenWidgetState extends State<CalenderScreenWidget> {
     );
   }
 }
+

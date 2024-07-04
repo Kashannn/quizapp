@@ -1,5 +1,3 @@
-
-
 import 'package:flutter/material.dart';
 import '../../../backend/firebase_services/firebase_services.dart';
 import '../answers_screen/answers_screen_widget.dart';
@@ -17,6 +15,7 @@ class RandomCasesScreenWidget extends StatefulWidget {
 
 class _RandomCasesScreenWidgetState extends State<RandomCasesScreenWidget> {
   bool isChecked = false;
+  bool isLoading = true; // Added loading state
   int correctCount = 0;
   FirebaseServices firebaseServices = FirebaseServices();
   List<QuizModelStruct> quizList = [];
@@ -25,15 +24,23 @@ class _RandomCasesScreenWidgetState extends State<RandomCasesScreenWidget> {
   int currentIndex = 0;
   String? selectedOption;
 
-  void getQuizList() async {
-    quizList = await firebaseServices.fetchQuizQuestions("Random Cases");
-    setState(() {}); // This setState is not needed here
-  }
-
   @override
   void initState() {
     super.initState();
     getQuizList();
+  }
+
+  Future<void> getQuizList() async {
+    quizList = await firebaseServices.fetchQuizQuestions("Random Cases");
+    if (quizList.isNotEmpty) {
+      // Preload all images
+      await Future.wait(
+        quizList.map((quiz) => precacheImage(NetworkImage(quiz.img), context)),
+      );
+    }
+    setState(() {
+      isLoading = false; // Set loading state to false after fetching data
+    });
   }
 
   void nextQuestion() {
@@ -89,15 +96,20 @@ class _RandomCasesScreenWidgetState extends State<RandomCasesScreenWidget> {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          title: Text("Random Cases",style:
-          TextStyle(color: Color(0xFF103358),
+          title: Text(
+            "Random Cases",
+            style: TextStyle(
+              color: Color(0xFF103358),
               fontWeight: FontWeight.bold,
-              fontSize: 20),),
+              fontSize: 20,
+              fontFamily: 'Poppins',
+            ),
+          ),
           centerTitle: true,
           elevation: 0,
-          backgroundColor: Colors.white,
+          backgroundColor: Colors.transparent,
         ),
-        body: quizList.isEmpty
+        body: isLoading
             ? Center(child: CircularProgressIndicator())
             : SingleChildScrollView(
           child: Column(
@@ -106,14 +118,16 @@ class _RandomCasesScreenWidgetState extends State<RandomCasesScreenWidget> {
               SizedBox(height: 10),
               Padding(
                 padding: const EdgeInsets.all(25.0),
-                child: Container(
-                  height: 200,
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                    image: DecorationImage(
-                      image: NetworkImage(quizList[currentIndex].img),
-                      fit: BoxFit.cover,
+                child: Material(
+                  child: Container(
+                    height: 200,
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      image: DecorationImage(
+                        image: NetworkImage(quizList[currentIndex].img),
+                        fit: BoxFit.cover,
+                      ),
                     ),
                   ),
                 ),
@@ -121,21 +135,36 @@ class _RandomCasesScreenWidgetState extends State<RandomCasesScreenWidget> {
               SizedBox(height: 10),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                child: Text(
-                  quizList[currentIndex].que,
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: Color(0xFF103358),
-                  ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Q: " + quizList[currentIndex].que,
+                      style: TextStyle(
+                        fontSize: 19,
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFF103358),
+                        fontFamily: 'Poppins',
+                      ),
+                    ),
+                    SizedBox(height: 20),
+                    Text(
+                      "Choose an answer:",
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFF103358),
+                        fontFamily: 'Poppins',
+                      ),
+                    ),
+                  ],
                 ),
               ),
-              SizedBox(height: 10),
+              SizedBox(height: 20),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 25.0),
                 child: Column(
-                  children: quizList[currentIndex]
-                      .options
+                  children: quizList[currentIndex].options
                       .asMap()
                       .entries
                       .map((entry) {
@@ -148,17 +177,9 @@ class _RandomCasesScreenWidgetState extends State<RandomCasesScreenWidget> {
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(10),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.1),
-                            spreadRadius: 1,
-                            blurRadius: 5,
-                            offset: Offset(0, 3),
-                          ),
-                        ],
                       ),
                       child: Material(
-                        elevation: 1.0,
+                        elevation: 5.0,
                         borderRadius: BorderRadius.circular(10),
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
@@ -168,8 +189,8 @@ class _RandomCasesScreenWidgetState extends State<RandomCasesScreenWidget> {
                             children: [
                               CircleAvatar(
                                 radius: 20,
-                                backgroundColor:
-                                Color(0xFF0000000D).withOpacity(0.05),
+                                backgroundColor: Color(0xFF0000000D)
+                                    .withOpacity(0.05),
                                 child: Text(
                                   String.fromCharCode(65 + index),
                                   style: TextStyle(
@@ -226,8 +247,10 @@ class _RandomCasesScreenWidgetState extends State<RandomCasesScreenWidget> {
                     style: ButtonStyle(
                       elevation: MaterialStateProperty.all<double>(0),
                       backgroundColor:
-                      MaterialStateProperty.all<Color>(Colors.transparent),
-                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                      MaterialStateProperty.all<Color>(
+                          Colors.transparent),
+                      shape: MaterialStateProperty.all<
+                          RoundedRectangleBorder>(
                         RoundedRectangleBorder(
                           borderRadius: BorderRadius.all(
                             Radius.circular(10),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:quiz_app/backend/schema/structs/quiz_model_struct.dart';
+import '../calender_screen/calender_screen_widget.dart';
 import '../home_screen/home_screen_widget.dart';
 
 class AnswersScreenWidget extends StatefulWidget {
@@ -122,7 +123,8 @@ class _AnswersScreenWidgetState extends State<AnswersScreenWidget> {
                           ),
                         ],
                       ),
-                      progressColor: Colors.white,
+                      progressColor: Color(0xFF00E774),
+                      backgroundColor: Colors.white,
                     ),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
@@ -164,8 +166,8 @@ class _AnswersScreenWidgetState extends State<AnswersScreenWidget> {
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(12),
                           color: answer['correct']
-                              ? Colors.green.withOpacity(0.1)
-                              : Colors.red.withOpacity(0.1),
+                              ? Colors.green.withOpacity(0.25)
+                              : Colors.red.withOpacity(0.30),
                         ),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,

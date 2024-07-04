@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:quiz_app/backend/firebase_services/firebase_services.dart';
-import '../backend/schema/structs/quiz_model_struct.dart';
-import '../components/pages/answers_screen/answers_screen_widget.dart';
+import 'package:quiz_app/flutter_flow/flutter_flow_util.dart';
+
+import '../components/pages/calender_screen/calender_screen_widget.dart';
+import '../flutter_flow/flutter_flow_theme.dart';
 
 class NewGuidelineCasesWidget extends StatefulWidget {
   final String category;
@@ -14,246 +15,226 @@ class NewGuidelineCasesWidget extends StatefulWidget {
 }
 
 class _NewGuidelineCasesWidgetState extends State<NewGuidelineCasesWidget> {
-  bool isChecked = false;
-  int correctCount = 0;
-  FirebaseServices firebaseServices = FirebaseServices();
-  List<QuizModelStruct> quizList = [];
-  List<Map<String, dynamic>> correctAnswers = [];
-  List<Map<String, dynamic>> selectedAnswers = [];
-  int currentIndex = 0;
-  String? selectedOption;
-
-  void getQuizList() async {
-    quizList = await firebaseServices.fetchQuizQuestions(widget.category);
-    setState(() {}); // This setState is not needed here
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    getQuizList();
-  }
-
-  void nextQuestion() {
-    if (currentIndex >= quizList.length) {
-      // Handle end of quiz or invalid state
-      return;
-    }
-
-    if (selectedOption == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Please select an option.')),
-      );
-      return;
-    }
-
-    bool isCorrect = selectedOption == quizList[currentIndex].correctOption;
-
-    if (isCorrect) {
-      correctCount++;
-    }
-
-    selectedAnswers.add({
-      'question': quizList[currentIndex].que,
-      'selectedOption': selectedOption,
-      'correct': isCorrect,
-      'correctAnswer': quizList[currentIndex].correctOption,
-      'details': quizList[currentIndex].details,
-    });
-
-    setState(() {
-      currentIndex++;
-      selectedOption = null;
-      isChecked = false;
-    });
-
-    if (currentIndex == quizList.length) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => AnswersScreenWidget(
-            totalQuestions: quizList.length,
-            correctAnswers: correctCount,
-            questionAnswers: selectedAnswers,
-            quizList: quizList,
-          ),
-        ),
-      );
-    }
-  }
+  List<DateTime?> _dates = [];
+  DateTime? _selectedDate;
+  int? _selectedYear;
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
+    return GestureDetector(
       child: Scaffold(
-        appBar: AppBar(
-          title: Text(
-            "New Guideline Cases",
-            style: TextStyle(
-                color: Color(0xFF103358),
-                fontWeight: FontWeight.bold,
-                fontSize: 20),
-          ),
-          centerTitle: true,
-          elevation: 0,
-          backgroundColor: Colors.white,
-        ),
-        body: quizList.isEmpty
-            ? Center(child: CircularProgressIndicator())
-            : SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    SizedBox(height: 10),
-                    Padding(
-                      padding: const EdgeInsets.all(25.0),
-                      child: Container(
-                        height: 200,
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(20),
-                          image: DecorationImage(
-                            image: NetworkImage(quizList[currentIndex].img),
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                      ),
+        backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
+        body: SafeArea(
+          top: true,
+          child: Column(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 25),
+                child: Center(
+                  child: Text(
+                    'New Guideline Cases',
+                    style: FlutterFlowTheme.of(context).bodyMedium.override(
+                      fontFamily: 'Poppins',
+                      fontSize: 18.0,
+                      letterSpacing: 0.0,
+                      fontWeight: FontWeight.w600,
                     ),
-                    SizedBox(height: 10),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                      child: Text(
-                        quizList[currentIndex].que,
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          color: Color(0xFF103358),
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: 10),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                      child: Column(
-                        children: quizList[currentIndex]
-                            .options
-                            .asMap()
-                            .entries
-                            .map((entry) {
-                          int index = entry.key;
-                          String option = entry.value;
-                          return Container(
-                            height: 55,
-                            width: double.infinity,
-                            margin: EdgeInsets.only(bottom: 8.0),
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(10),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.black.withOpacity(0.1),
-                                  spreadRadius: 1,
-                                  blurRadius: 5,
-                                  offset: Offset(0, 3),
-                                ),
-                              ],
-                            ),
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsetsDirectional.fromSTEB(25.0, 0.0, 0.0, 23.0),
+                child: Text(
+                  'Filter By',
+                  style: FlutterFlowTheme.of(context).bodyMedium.override(
+                    fontFamily: 'Poppins',
+                    color: const Color(0xFF103358),
+                    letterSpacing: 0.0,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ),
+              Flexible(
+                child: Padding(
+                  padding: const EdgeInsetsDirectional.fromSTEB(25.0, 0.0, 25.0, 0.0),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Flexible(
+                        child: Padding(
+                          padding: const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 10.0, 0.0),
+                          child: InkWell(
+                            onTap: () async {
+                              DateTime? picked = await showDatePicker(
+                                context: context,
+                                initialDate: DateTime.now(),
+                                firstDate: DateTime(2000),
+                                lastDate: DateTime(2101),
+                              );
+                              if (picked != null) {
+                                setState(() {
+                                  _selectedDate = picked;
+                                });
+                              }
+                            },
                             child: Material(
+                              color: Colors.transparent,
                               elevation: 1.0,
-                              borderRadius: BorderRadius.circular(10),
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
+                              shape: const RoundedRectangleBorder(
+                                borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                              ),
+                              child: Container(
+                                width: double.infinity,
+                                height: 40.0,
+                                decoration: BoxDecoration(
+                                  color: FlutterFlowTheme.of(context).secondaryBackground,
+                                  borderRadius: const BorderRadius.all(Radius.circular(10.0)),
+                                ),
                                 child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
+                                  mainAxisSize: MainAxisSize.max,
+                                  mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    CircleAvatar(
-                                      radius: 20,
-                                      backgroundColor:
-                                          Color(0xFF0000000D).withOpacity(0.05),
-                                      child: Text(
-                                        String.fromCharCode(65 + index),
-                                        style: TextStyle(
-                                          color: Color(0xFF18A0FB),
-                                          fontSize: 23,
-                                          fontWeight: FontWeight.bold,
-                                        ),
+                                    Text(
+                                      _selectedDate != null
+                                          ? '${_selectedDate!.day}/${_selectedDate!.month}/${_selectedDate!.year}'
+                                          : 'Date',
+                                      style: FlutterFlowTheme.of(context).bodyMedium.override(
+                                        fontFamily: 'Poppins',
+                                        color: const Color(0xFF103358),
+                                        letterSpacing: 0.0,
+                                        fontSize: 14,
                                       ),
                                     ),
-                                    SizedBox(width: 13),
-                                    Expanded(
-                                      child: Text(
-                                        option,
-                                        style: TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.bold,
-                                          color: Color(0xFF103358),
-                                        ),
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                    ),
-                                    Radio<String>(
-                                      value: option,
-                                      groupValue: selectedOption,
-                                      onChanged: (String? value) {
-                                        setState(() {
-                                          selectedOption = value;
-                                        });
-                                      },
+                                    const Icon(
+                                      Icons.date_range_outlined,
+                                      color: Color(0xFF18A0FB),
+                                      size: 24.0,
                                     ),
                                   ],
                                 ),
                               ),
                             ),
-                          );
-                        }).toList(),
-                      ),
-                    ),
-                    SizedBox(height: 10),
-                    Padding(
-                      padding: const EdgeInsets.all(25.0),
-                      child: Container(
-                        width: double.infinity,
-                        height: 52,
-                        padding: EdgeInsets.zero,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(10),
                           ),
-                          color: Color(0xFF18A0FB),
                         ),
-                        child: ElevatedButton(
-                          onPressed: nextQuestion,
-                          style: ButtonStyle(
-                            elevation: MaterialStateProperty.all<double>(0),
-                            backgroundColor: MaterialStateProperty.all<Color>(
-                                Colors.transparent),
-                            shape: MaterialStateProperty.all<
-                                RoundedRectangleBorder>(
-                              RoundedRectangleBorder(
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(10),
+                      ),
+                      Flexible(
+                        child: Padding(
+                          padding: const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 10.0, 0.0),
+                          child: InkWell(
+                            onTap: () async {
+                              DateTime? picked = await showDatePicker(
+                                context: context,
+                                initialDate: DateTime.now(),
+                                firstDate: DateTime(2024),
+                                lastDate: DateTime(2125),
+                                helpText: 'Select Year',
+                                fieldLabelText: 'Year',
+                                initialDatePickerMode: DatePickerMode.year,
+                              );
+                              if (picked != null) {
+                                setState(() {
+                                  _selectedYear = picked.year;
+                                });
+                              }
+                            },
+                            child: Material(
+                              color: Colors.transparent,
+                              elevation: 1.0,
+                              shape: const RoundedRectangleBorder(
+                                borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                              ),
+                              child: Container(
+                                width: double.infinity,
+                                height: 40.0,
+                                decoration: BoxDecoration(
+                                  color: FlutterFlowTheme.of(context).secondaryBackground,
+                                  borderRadius: const BorderRadius.all(Radius.circular(10.0)),
+                                ),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.max,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      _selectedYear != null
+                                          ? '$_selectedYear'
+                                          : 'Year',
+                                      style: FlutterFlowTheme.of(context).bodyMedium.override(
+                                        fontFamily: 'Poppins',
+                                        color: const Color(0xFF103358),
+                                        letterSpacing: 0.0,
+                                        fontSize: 20,
+                                      ),
+                                    ),
+                                    const Icon(
+                                      Icons.date_range_outlined,
+                                      color: Color(0xFF18A0FB),
+                                      size: 24.0,
+                                    ),
+                                  ],
                                 ),
                               ),
                             ),
                           ),
-                          child: Text(
-                            'Next',
-                            style: TextStyle(
-                              fontFamily: 'Poppins',
-                              fontSize: 15,
-                              fontWeight: FontWeight.w500,
-                              height: 1.333,
-                              letterSpacing: -0.24,
-                              color: Colors.white,
-                            ),
-                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(25.0),
+                child: Container(
+                  width: double.infinity,
+                  height: 52,
+                  padding: EdgeInsets.zero,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(10),
+                    ),
+                    color: Color(0xFF18A0FB),
+                  ),
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => CalenderScreenWidget(selectedDate: _selectedDate),
+                        ),
+                      );
+                      print(_selectedDate);
+                    },
+                    style: ButtonStyle(
+                      elevation: MaterialStateProperty.all<double>(0),
+                      backgroundColor: MaterialStateProperty.all<Color>(Colors.transparent),
+                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(10)),
                         ),
                       ),
                     ),
-                  ],
+                    child: Text(
+                      'Find Result',
+                      style: TextStyle(
+                        fontFamily: 'Poppins',
+                        fontSize: 15,
+                        fontWeight: FontWeight.w500,
+                        height: 1.333,
+                        letterSpacing: -0.24,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+
                 ),
               ),
+            ],
+          ),
+        ),
       ),
     );
   }
