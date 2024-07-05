@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart'; // Import this package to format the date
 import 'package:quiz_app/flutter_flow/flutter_flow_util.dart';
 
 import '../components/pages/calender_screen/calender_screen_widget.dart';
@@ -15,9 +16,13 @@ class NewGuidelineCasesWidget extends StatefulWidget {
 }
 
 class _NewGuidelineCasesWidgetState extends State<NewGuidelineCasesWidget> {
-  List<DateTime?> _dates = [];
   DateTime? _selectedDate;
   int? _selectedYear;
+
+  String _formatDate(DateTime date) {
+    final DateFormat formatter = DateFormat('dd/MM/yy');
+    return formatter.format(date);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -101,7 +106,7 @@ class _NewGuidelineCasesWidgetState extends State<NewGuidelineCasesWidget> {
                                   children: [
                                     Text(
                                       _selectedDate != null
-                                          ? '${_selectedDate!.day}/${_selectedDate!.month}/${_selectedDate!.year}'
+                                          ? _formatDate(_selectedDate!)
                                           : 'Date',
                                       style: FlutterFlowTheme.of(context).bodyMedium.override(
                                         fontFamily: 'Poppins',
@@ -206,7 +211,7 @@ class _NewGuidelineCasesWidgetState extends State<NewGuidelineCasesWidget> {
                           builder: (context) => CalenderScreenWidget(selectedDate: _selectedDate),
                         ),
                       );
-                      print(_selectedDate);
+                      print(_selectedDate != null ? _formatDate(_selectedDate!) : 'No date selected');
                     },
                     style: ButtonStyle(
                       elevation: MaterialStateProperty.all<double>(0),

@@ -60,7 +60,7 @@ class _SignupScreenWidgetState extends State<SignupScreenWidget> {
           : FocusScope.of(context).unfocus(),
       child: Scaffold(
         key: scaffoldKey,
-        backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
+        backgroundColor: (Color(0xFFF1F4F8)),
         body: SafeArea(
           top: true,
           child: Align(
@@ -107,17 +107,17 @@ class _SignupScreenWidgetState extends State<SignupScreenWidget> {
                                         ),
                                         child: Align(
                                           alignment:
-                                              const AlignmentDirectional(0.0, 0.0),
+                                          const AlignmentDirectional(0.0, 0.0),
                                           child: Padding(
                                             padding:
-                                                const EdgeInsetsDirectional.fromSTEB(
-                                                    0.0, 0.0, 10.0, 0.0),
+                                            const EdgeInsetsDirectional.fromSTEB(
+                                                0.0, 0.0, 10.0, 0.0),
                                             child: InkWell(
                                               splashColor: Colors.transparent,
                                               focusColor: Colors.transparent,
                                               hoverColor: Colors.transparent,
                                               highlightColor:
-                                                  Colors.transparent,
+                                              Colors.transparent,
                                               onTap: () async {
                                                 context.safePop();
                                               },
@@ -137,25 +137,19 @@ class _SignupScreenWidgetState extends State<SignupScreenWidget> {
                             ),
                             Flexible(
                               child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
                                 mainAxisSize: MainAxisSize.max,
                                 children: [
-                                  Align(
-                                    alignment: const AlignmentDirectional(0.0, -1.0),
-                                    child: Padding(
-                                      padding: const EdgeInsetsDirectional.fromSTEB(
-                                          83.0, 0.0, 0.0, 0.0),
-                                      child: Text(
-                                        'Sign Up',
-                                        style: FlutterFlowTheme.of(context)
-                                            .bodyMedium
-                                            .override(
-                                              fontFamily: 'Poppins',
-                                              color: const Color(0xFF202244),
-                                              fontSize: 18.0,
-                                              letterSpacing: 0.0,
-                                              fontWeight: FontWeight.w600,
-                                            ),
-                                      ),
+                                  Text(
+                                    'Sign Up',
+                                    style: FlutterFlowTheme.of(context)
+                                        .bodyMedium
+                                        .override(
+                                      fontFamily: 'Poppins',
+                                      color: const Color(0xFF202244),
+                                      fontSize: 18.0,
+                                      letterSpacing: 0.0,
+                                      fontWeight: FontWeight.w600,
                                     ),
                                   ),
                                 ],
@@ -173,16 +167,16 @@ class _SignupScreenWidgetState extends State<SignupScreenWidget> {
                         child: Text(
                           'Add Profile Photo',
                           style:
-                              FlutterFlowTheme.of(context).bodyMedium.override(
-                                    fontFamily: 'Poppins',
-                                    letterSpacing: 0.0,
-                                  ),
+                          FlutterFlowTheme.of(context).bodyMedium.override(
+                            fontFamily: 'Poppins',
+                            letterSpacing: 0.0,
+                          ),
                         ),
                       ),
                     ),
                     Padding(
                       padding:
-                          const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 20.0),
+                      const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 20.0),
                       child: Container(
                         width: 370.0,
                         height: 103.0,
@@ -211,7 +205,7 @@ class _SignupScreenWidgetState extends State<SignupScreenWidget> {
                                   highlightColor: Colors.transparent,
                                   onTap: () async {
                                     final selectedMedia =
-                                        await selectMediaWithSourceBottomSheet(
+                                    await selectMediaWithSourceBottomSheet(
                                       context: context,
                                       allowPhoto: true,
                                     );
@@ -220,21 +214,21 @@ class _SignupScreenWidgetState extends State<SignupScreenWidget> {
                                             validateFileFormat(
                                                 m.storagePath, context))) {
                                       setState(
-                                          () => _model.isDataUploading1 = true);
+                                              () => _model.isDataUploading1 = true);
                                       var selectedUploadedFiles =
-                                          <FFUploadedFile>[];
+                                      <FFUploadedFile>[];
 
                                       try {
                                         selectedUploadedFiles = selectedMedia
                                             .map((m) => FFUploadedFile(
-                                                  name: m.storagePath
-                                                      .split('/')
-                                                      .last,
-                                                  bytes: m.bytes,
-                                                  height: m.dimensions?.height,
-                                                  width: m.dimensions?.width,
-                                                  blurHash: m.blurHash,
-                                                ))
+                                          name: m.storagePath
+                                              .split('/')
+                                              .last,
+                                          bytes: m.bytes,
+                                          height: m.dimensions?.height,
+                                          width: m.dimensions?.width,
+                                          blurHash: m.blurHash,
+                                        ))
                                             .toList();
                                       } finally {
                                         _model.isDataUploading1 = false;
@@ -253,7 +247,7 @@ class _SignupScreenWidgetState extends State<SignupScreenWidget> {
                                   },
                                   child: Icon(
                                     Icons.cloud_upload,
-                                    color: FlutterFlowTheme.of(context).primary,
+                                    color:  const Color(0x333B4E99),
                                     size: 50.0,
                                   ),
                                 ),
@@ -263,20 +257,20 @@ class _SignupScreenWidgetState extends State<SignupScreenWidget> {
                                 style: FlutterFlowTheme.of(context)
                                     .bodyMedium
                                     .override(
-                                      fontFamily: 'Poppins',
-                                      color: const Color(0x333B4E99),
-                                      letterSpacing: 0.0,
-                                    ),
+                                  fontFamily: 'Poppins',
+                                  color: const Color(0x333B4E99),
+                                  letterSpacing: 0.0,
+                                ),
                               ),
                               Text(
                                 '(Max. File size: 25 MB)',
                                 style: FlutterFlowTheme.of(context)
                                     .bodyMedium
                                     .override(
-                                      fontFamily: 'Poppins',
-                                      color: const Color(0xFFBDBDBD),
-                                      letterSpacing: 0.0,
-                                    ),
+                                  fontFamily: 'Poppins',
+                                  color: const Color(0xFFBDBDBD),
+                                  letterSpacing: 0.0,
+                                ),
                               ),
                             ],
                           ),
@@ -285,7 +279,7 @@ class _SignupScreenWidgetState extends State<SignupScreenWidget> {
                     ),
                     Padding(
                       padding:
-                          const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 16.0),
+                      const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 16.0),
                       child: SizedBox(
                         width: 370.0,
                         child: TextFormField(
@@ -295,17 +289,17 @@ class _SignupScreenWidgetState extends State<SignupScreenWidget> {
                           autofillHints: const [AutofillHints.name],
                           obscureText: false,
                           decoration: InputDecoration(
+
                             labelText: 'Name',
                             labelStyle: FlutterFlowTheme.of(context)
                                 .labelMedium
                                 .override(
-                                  fontFamily: 'Readex Pro',
-                                  letterSpacing: 0.0,
-                                ),
+                              fontFamily: 'Readex Pro',
+                              letterSpacing: 0.0,
+                            ),
                             enabledBorder: OutlineInputBorder(
                               borderSide: BorderSide(
-                                color: FlutterFlowTheme.of(context)
-                                    .primaryBackground,
+                                color: Colors.white,
                                 width: 2.0,
                               ),
                               borderRadius: BorderRadius.circular(12.0),
@@ -333,13 +327,13 @@ class _SignupScreenWidgetState extends State<SignupScreenWidget> {
                             ),
                             filled: true,
                             fillColor:
-                                FlutterFlowTheme.of(context).primaryBackground,
+                            Colors.white,
                           ),
                           style:
-                              FlutterFlowTheme.of(context).bodyMedium.override(
-                                    fontFamily: 'Poppins',
-                                    letterSpacing: 0.0,
-                                  ),
+                          FlutterFlowTheme.of(context).bodyMedium.override(
+                            fontFamily: 'Poppins',
+                            letterSpacing: 0.0,
+                          ),
                           keyboardType: TextInputType.name,
                           validator: _model.nameTextControllerValidator
                               .asValidator(context),
@@ -348,7 +342,7 @@ class _SignupScreenWidgetState extends State<SignupScreenWidget> {
                     ),
                     Padding(
                       padding:
-                          const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 16.0),
+                      const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 16.0),
                       child: SizedBox(
                         width: 370.0,
                         child: TextFormField(
@@ -362,9 +356,9 @@ class _SignupScreenWidgetState extends State<SignupScreenWidget> {
                             labelStyle: FlutterFlowTheme.of(context)
                                 .labelMedium
                                 .override(
-                                  fontFamily: 'Readex Pro',
-                                  letterSpacing: 0.0,
-                                ),
+                              fontFamily: 'Readex Pro',
+                              letterSpacing: 0.0,
+                            ),
                             enabledBorder: OutlineInputBorder(
                               borderSide: BorderSide(
                                 color: FlutterFlowTheme.of(context)
@@ -375,7 +369,7 @@ class _SignupScreenWidgetState extends State<SignupScreenWidget> {
                             ),
                             focusedBorder: OutlineInputBorder(
                               borderSide: BorderSide(
-                                color: FlutterFlowTheme.of(context).primary,
+                                color: Color(0xFF18A0FB),
                                 width: 2.0,
                               ),
                               borderRadius: BorderRadius.circular(12.0),
@@ -396,13 +390,13 @@ class _SignupScreenWidgetState extends State<SignupScreenWidget> {
                             ),
                             filled: true,
                             fillColor:
-                                FlutterFlowTheme.of(context).primaryBackground,
+                            Colors.white,
                           ),
                           style:
-                              FlutterFlowTheme.of(context).bodyMedium.override(
-                                    fontFamily: 'Poppins',
-                                    letterSpacing: 0.0,
-                                  ),
+                          FlutterFlowTheme.of(context).bodyMedium.override(
+                            fontFamily: 'Poppins',
+                            letterSpacing: 0.0,
+                          ),
                           keyboardType: TextInputType.emailAddress,
                           validator: _model.emailAddressTextControllerValidator
                               .asValidator(context),
@@ -411,7 +405,7 @@ class _SignupScreenWidgetState extends State<SignupScreenWidget> {
                     ),
                     Padding(
                       padding:
-                          const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 16.0),
+                      const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 16.0),
                       child: SizedBox(
                         width: 370.0,
                         child: TextFormField(
@@ -425,9 +419,9 @@ class _SignupScreenWidgetState extends State<SignupScreenWidget> {
                             labelStyle: FlutterFlowTheme.of(context)
                                 .labelMedium
                                 .override(
-                                  fontFamily: 'Readex Pro',
-                                  letterSpacing: 0.0,
-                                ),
+                              fontFamily: 'Readex Pro',
+                              letterSpacing: 0.0,
+                            ),
                             enabledBorder: OutlineInputBorder(
                               borderSide: BorderSide(
                                 color: FlutterFlowTheme.of(context)
@@ -438,7 +432,7 @@ class _SignupScreenWidgetState extends State<SignupScreenWidget> {
                             ),
                             focusedBorder: OutlineInputBorder(
                               borderSide: BorderSide(
-                                color: FlutterFlowTheme.of(context).primary,
+                                color: Color(0xFF18A0FB),
                                 width: 2.0,
                               ),
                               borderRadius: BorderRadius.circular(12.0),
@@ -451,19 +445,20 @@ class _SignupScreenWidgetState extends State<SignupScreenWidget> {
                               borderRadius: BorderRadius.circular(12.0),
                             ),
                             focusedErrorBorder: OutlineInputBorder(
+
                               borderSide: BorderSide(
-                                color: FlutterFlowTheme.of(context).alternate,
+                                color:  Color(0xFF18A0FB),
                                 width: 2.0,
                               ),
                               borderRadius: BorderRadius.circular(12.0),
                             ),
                             filled: true,
                             fillColor:
-                                FlutterFlowTheme.of(context).primaryBackground,
+                            Colors.white,
                             suffixIcon: InkWell(
                               onTap: () => setState(
-                                () => _model.passwordVisibility =
-                                    !_model.passwordVisibility,
+                                    () => _model.passwordVisibility =
+                                !_model.passwordVisibility,
                               ),
                               focusNode: FocusNode(skipTraversal: true),
                               child: Icon(
@@ -471,16 +466,16 @@ class _SignupScreenWidgetState extends State<SignupScreenWidget> {
                                     ? Icons.visibility_outlined
                                     : Icons.visibility_off_outlined,
                                 color:
-                                    FlutterFlowTheme.of(context).secondaryText,
+                                FlutterFlowTheme.of(context).secondaryText,
                                 size: 24.0,
                               ),
                             ),
                           ),
                           style:
-                              FlutterFlowTheme.of(context).bodyMedium.override(
-                                    fontFamily: 'Poppins',
-                                    letterSpacing: 0.0,
-                                  ),
+                          FlutterFlowTheme.of(context).bodyMedium.override(
+                            fontFamily: 'Poppins',
+                            letterSpacing: 0.0,
+                          ),
                           validator: _model.passwordTextControllerValidator
                               .asValidator(context),
                         ),
@@ -488,7 +483,7 @@ class _SignupScreenWidgetState extends State<SignupScreenWidget> {
                     ),
                     Padding(
                       padding:
-                          const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 16.0),
+                      const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 16.0),
                       child: SizedBox(
                         width: 370.0,
                         child: TextFormField(
@@ -498,13 +493,13 @@ class _SignupScreenWidgetState extends State<SignupScreenWidget> {
                           autofillHints: const [AutofillHints.password],
                           obscureText: !_model.confrimpasswordVisibility,
                           decoration: InputDecoration(
-                            labelText: 'Confrim Password',
+                            labelText: 'Confirm Password',
                             labelStyle: FlutterFlowTheme.of(context)
                                 .labelMedium
                                 .override(
-                                  fontFamily: 'Readex Pro',
-                                  letterSpacing: 0.0,
-                                ),
+                              fontFamily: 'Readex Pro',
+                              letterSpacing: 0.0,
+                            ),
                             enabledBorder: OutlineInputBorder(
                               borderSide: BorderSide(
                                 color: FlutterFlowTheme.of(context)
@@ -515,7 +510,7 @@ class _SignupScreenWidgetState extends State<SignupScreenWidget> {
                             ),
                             focusedBorder: OutlineInputBorder(
                               borderSide: BorderSide(
-                                color: FlutterFlowTheme.of(context).primary,
+                                color: Color(0xFF18A0FB),
                                 width: 2.0,
                               ),
                               borderRadius: BorderRadius.circular(12.0),
@@ -536,11 +531,11 @@ class _SignupScreenWidgetState extends State<SignupScreenWidget> {
                             ),
                             filled: true,
                             fillColor:
-                                FlutterFlowTheme.of(context).primaryBackground,
+                            Colors.white,
                             suffixIcon: InkWell(
                               onTap: () => setState(
-                                () => _model.confrimpasswordVisibility =
-                                    !_model.confrimpasswordVisibility,
+                                    () => _model.confrimpasswordVisibility =
+                                !_model.confrimpasswordVisibility,
                               ),
                               focusNode: FocusNode(skipTraversal: true),
                               child: Icon(
@@ -548,16 +543,16 @@ class _SignupScreenWidgetState extends State<SignupScreenWidget> {
                                     ? Icons.visibility_outlined
                                     : Icons.visibility_off_outlined,
                                 color:
-                                    FlutterFlowTheme.of(context).secondaryText,
+                                FlutterFlowTheme.of(context).secondaryText,
                                 size: 24.0,
                               ),
                             ),
                           ),
                           style:
-                              FlutterFlowTheme.of(context).bodyMedium.override(
-                                    fontFamily: 'Poppins',
-                                    letterSpacing: 0.0,
-                                  ),
+                          FlutterFlowTheme.of(context).bodyMedium.override(
+                            fontFamily: 'Poppins',
+                            letterSpacing: 0.0,
+                          ),
                           validator: _model
                               .confrimpasswordTextControllerValidator
                               .asValidator(context),
@@ -566,7 +561,7 @@ class _SignupScreenWidgetState extends State<SignupScreenWidget> {
                     ),
                     Padding(
                       padding:
-                          const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 16.0),
+                      const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 16.0),
                       child: SizedBox(
                         width: 370.0,
                         child: TextFormField(
@@ -580,9 +575,9 @@ class _SignupScreenWidgetState extends State<SignupScreenWidget> {
                             labelStyle: FlutterFlowTheme.of(context)
                                 .labelMedium
                                 .override(
-                                  fontFamily: 'Readex Pro',
-                                  letterSpacing: 0.0,
-                                ),
+                              fontFamily: 'Readex Pro',
+                              letterSpacing: 0.0,
+                            ),
                             enabledBorder: OutlineInputBorder(
                               borderSide: BorderSide(
                                 color: FlutterFlowTheme.of(context)
@@ -593,7 +588,7 @@ class _SignupScreenWidgetState extends State<SignupScreenWidget> {
                             ),
                             focusedBorder: OutlineInputBorder(
                               borderSide: BorderSide(
-                                color: FlutterFlowTheme.of(context).primary,
+                                color: Color(0xFF18A0FB),
                                 width: 2.0,
                               ),
                               borderRadius: BorderRadius.circular(12.0),
@@ -614,13 +609,13 @@ class _SignupScreenWidgetState extends State<SignupScreenWidget> {
                             ),
                             filled: true,
                             fillColor:
-                                FlutterFlowTheme.of(context).primaryBackground,
+                            Colors.white,
                           ),
                           style:
-                              FlutterFlowTheme.of(context).bodyMedium.override(
-                                    fontFamily: 'Poppins',
-                                    letterSpacing: 0.0,
-                                  ),
+                          FlutterFlowTheme.of(context).bodyMedium.override(
+                            fontFamily: 'Poppins',
+                            letterSpacing: 0.0,
+                          ),
                           validator: _model.countryTextControllerValidator
                               .asValidator(context),
                         ),
@@ -628,7 +623,7 @@ class _SignupScreenWidgetState extends State<SignupScreenWidget> {
                     ),
                     Padding(
                       padding:
-                          const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 16.0),
+                      const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 16.0),
                       child: SizedBox(
                         width: 370.0,
                         child: TextFormField(
@@ -642,9 +637,9 @@ class _SignupScreenWidgetState extends State<SignupScreenWidget> {
                             labelStyle: FlutterFlowTheme.of(context)
                                 .labelMedium
                                 .override(
-                                  fontFamily: 'Readex Pro',
-                                  letterSpacing: 0.0,
-                                ),
+                              fontFamily: 'Readex Pro',
+                              letterSpacing: 0.0,
+                            ),
                             enabledBorder: OutlineInputBorder(
                               borderSide: BorderSide(
                                 color: FlutterFlowTheme.of(context)
@@ -655,7 +650,7 @@ class _SignupScreenWidgetState extends State<SignupScreenWidget> {
                             ),
                             focusedBorder: OutlineInputBorder(
                               borderSide: BorderSide(
-                                color: FlutterFlowTheme.of(context).primary,
+                                color: Color(0xFF18A0FB),
                                 width: 2.0,
                               ),
                               borderRadius: BorderRadius.circular(12.0),
@@ -676,13 +671,13 @@ class _SignupScreenWidgetState extends State<SignupScreenWidget> {
                             ),
                             filled: true,
                             fillColor:
-                                FlutterFlowTheme.of(context).primaryBackground,
+                            Colors.white,
                           ),
                           style:
-                              FlutterFlowTheme.of(context).bodyMedium.override(
-                                    fontFamily: 'Poppins',
-                                    letterSpacing: 0.0,
-                                  ),
+                          FlutterFlowTheme.of(context).bodyMedium.override(
+                            fontFamily: 'Poppins',
+                            letterSpacing: 0.0,
+                          ),
                           keyboardType: TextInputType.phone,
                           validator: _model.phonenumberTextControllerValidator
                               .asValidator(context),
@@ -693,7 +688,7 @@ class _SignupScreenWidgetState extends State<SignupScreenWidget> {
                       alignment: const AlignmentDirectional(0.0, -1.0),
                       child: Padding(
                         padding:
-                            const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 16.0),
+                        const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 16.0),
                         child: FFButtonWidget(
                           onPressed: () async {
                             {
@@ -703,15 +698,15 @@ class _SignupScreenWidgetState extends State<SignupScreenWidget> {
                               var downloadUrls = <String>[];
                               try {
                                 selectedUploadedFiles =
-                                    _model.uploadedLocalFile1.bytes!.isNotEmpty
-                                        ? [_model.uploadedLocalFile1]
-                                        : <FFUploadedFile>[];
+                                _model.uploadedLocalFile1.bytes!.isNotEmpty
+                                    ? [_model.uploadedLocalFile1]
+                                    : <FFUploadedFile>[];
                                 selectedMedia = selectedFilesFromUploadedFiles(
                                   selectedUploadedFiles,
                                 );
                                 downloadUrls = (await Future.wait(
                                   selectedMedia.map(
-                                    (m) async => await uploadData(
+                                        (m) async => await uploadData(
                                         m.storagePath, m.bytes),
                                   ),
                                 ))
@@ -722,7 +717,7 @@ class _SignupScreenWidgetState extends State<SignupScreenWidget> {
                                 _model.isDataUploading2 = false;
                               }
                               if (selectedUploadedFiles.length ==
-                                      selectedMedia.length &&
+                                  selectedMedia.length &&
                                   downloadUrls.length == selectedMedia.length) {
                                 setState(() {
                                   _model.uploadedLocalFile2 =
@@ -749,7 +744,7 @@ class _SignupScreenWidgetState extends State<SignupScreenWidget> {
                             }
 
                             final user =
-                                await authManager.createAccountWithEmail(
+                            await authManager.createAccountWithEmail(
                               context,
                               _model.emailAddressTextController.text,
                               _model.passwordTextController.text,
@@ -761,13 +756,13 @@ class _SignupScreenWidgetState extends State<SignupScreenWidget> {
                             await UsersRecord.collection
                                 .doc(user.uid)
                                 .update(createUsersRecordData(
-                                  email: _model.emailAddressTextController.text,
-                                  displayName: _model.nameTextController.text,
-                                  photoUrl: _model.uploadedFileUrl2,
-                                  phoneNumber:
-                                      _model.phonenumberTextController.text,
-                                  country: _model.countryTextController.text,
-                                ));
+                              email: _model.emailAddressTextController.text,
+                              displayName: _model.nameTextController.text,
+                              photoUrl: _model.uploadedFileUrl2,
+                              phoneNumber:
+                              _model.phonenumberTextController.text,
+                              country: _model.countryTextController.text,
+                            ));
 
                             context.pushNamedAuth(
                                 'login_screen', context.mounted);
@@ -784,10 +779,10 @@ class _SignupScreenWidgetState extends State<SignupScreenWidget> {
                             textStyle: FlutterFlowTheme.of(context)
                                 .titleSmall
                                 .override(
-                                  fontFamily: 'Poppins',
-                                  color: Colors.white,
-                                  letterSpacing: 0.0,
-                                ),
+                              fontFamily: 'Poppins',
+                              color: Colors.white,
+                              letterSpacing: 0.0,
+                            ),
                             elevation: 3.0,
                             borderSide: const BorderSide(
                               color: Colors.transparent,
@@ -826,20 +821,19 @@ class _SignupScreenWidgetState extends State<SignupScreenWidget> {
                                   style: FlutterFlowTheme.of(context)
                                       .bodyMedium
                                       .override(
-                                        fontFamily: 'Readex Pro',
-                                        color: FlutterFlowTheme.of(context)
-                                            .primary,
-                                        letterSpacing: 0.0,
-                                        fontWeight: FontWeight.w600,
-                                      ),
+                                    fontFamily: 'Readex Pro',
+                                    color: Color(0xFF18A0FB),
+                                    letterSpacing: 0.0,
+                                    fontWeight: FontWeight.w600,
+                                  ),
                                 )
                               ],
                               style: FlutterFlowTheme.of(context)
                                   .bodyMedium
                                   .override(
-                                    fontFamily: 'Poppins',
-                                    letterSpacing: 0.0,
-                                  ),
+                                fontFamily: 'Poppins',
+                                letterSpacing: 0.0,
+                              ),
                             ),
                           ),
                         ),
